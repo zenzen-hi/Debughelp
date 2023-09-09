@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=3 uid="uid://csneba2b2goq3"]
+
+[ext_resource type="Script" path="res://scences/player/Player.gd" id="1_nuu4y"]
+[ext_resource type="Texture2D" uid="uid://cqn5jgdm1qagm" path="res://resourcesCopyRighted/graphics/player/player.png" id="2_dt4sa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_llm02"]
+radius = 60.0083
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_paut8"]
+emission_shape = 1
+emission_sphere_radius = 8.0
+particle_flag_disable_z = true
+spread = 0.05
+gravity = Vector3(1, 0, 0)
+initial_velocity_min = 1000.0
+initial_velocity_max = 1000.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+linear_accel_max = 1000.0
+scale_max = 5.0
+color = Color(0.0588235, 1, 1, 1)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_44urw"]
+polygon = PackedVector2Array(7, 10, -14, 1, -11, -18, 5, -25, 20, -16, 20, 4)
+
+[node name="Player" type="CharacterBody2D"]
+collision_mask = 31
+script = ExtResource("1_nuu4y")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(38, 0)
+rotation = 1.5708
+texture = ExtResource("2_dt4sa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_llm02")
+
+[node name="LaserCooldown" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="GrenadeCooldown" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[node name="LaserStartPositions" type="Node2D" parent="."]
+rotation = 1.5708
+
+[node name="Marker2D" type="Marker2D" parent="LaserStartPositions"]
+position = Vector2(18, -135)
+
+[node name="Marker2D2" type="Marker2D" parent="LaserStartPositions"]
+position = Vector2(11, -132)
+
+[node name="Marker2D3" type="Marker2D" parent="LaserStartPositions"]
+position = Vector2(27, -132)
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(135, 18)
+emitting = false
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_paut8")
+lifetime = 0.5
+one_shot = true
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_44urw")
+
+[connection signal="timeout" from="LaserCooldown" to="." method="_on_laser_cooldown_timeout"]
+[connection signal="timeout" from="GrenadeCooldown" to="." method="_on_grenade_timer_timeout"]

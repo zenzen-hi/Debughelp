@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://c8gvgiwpvyvgv"]
+
+[ext_resource type="Texture2D" uid="uid://c5v2xmwsk86ss" path="res://resourcesCopyRighted/graphics/objects/light.png" id="1_nxly6"]
+[ext_resource type="Script" path="res://scences/objects/simple_light.gd" id="1_v7ppa"]
+[ext_resource type="Texture2D" uid="uid://p5nyb1ukeaqf" path="res://resourcesCopyRighted/graphics/lights/textures/circle.png" id="2_cfabb"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7j1ap"]
+radius = 17.0
+height = 196.0
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_nmoy2"]
+polygon = PackedVector2Array(-77, 14, -77, -5, -70, -13, 67, -14, 76, -7, 76, 15, 90, 14, 99, 4, 98, -7, 93, -13, 81, -18, -82, -18, -93, -13, -98, -5, -98, 6, -87, 16, -77, 16)
+
+[node name="SimpleLight" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 11
+script = ExtResource("1_v7ppa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_7j1ap")
+
+[node name="Light" type="Sprite2D" parent="."]
+texture = ExtResource("1_nxly6")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0.521569, 0.360784, 1)
+energy = 3.45
+shadow_enabled = true
+shadow_color = Color(0.12549, 0, 0, 0.152941)
+shadow_filter = 1
+shadow_filter_smooth = 7.1
+texture = ExtResource("2_cfabb")
+texture_scale = 3.0
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_nmoy2")
+
+[node name="restart" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="timeout" from="restart" to="." method="_on_restart_timeout"]
